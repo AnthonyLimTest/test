@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  if: github.event_name != 'pull_request' || github.event.action == 'enqueued'
+  if: github.event_name == 'merge_group'
   update_version:
     name: update version
     runs-on: ubuntu-slim
