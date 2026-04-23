@@ -1,16 +1,14 @@
 name: Build and upload to PyPI
 
 on:
-  pull_request:
-    branches: ['main']
-  merge_group:
-    types: [checks_requested]
+  push:
+    branches:
+    - 'main'
 
 permissions:
   contents: write
 
 jobs:
-  if: github.event_name != 'pull_request' || github.event.action == 'enqueued'
   update_version:
     name: update version
     runs-on: ubuntu-slim
@@ -20,7 +18,7 @@ jobs:
         with:
           fetch-depth: "1"
       - name: Update version on merge
-        run:  |
+        run: |
             python tools/version.py "beta"
       - name: Store changes
         uses: actions/upload-artifact@v4
@@ -53,5 +51,5 @@ jobs:
           author_email: github-actions@github.com
           message: "update version number"
           add: |
+            - setup.py
             - pyproject.toml
-            - setup.py'
