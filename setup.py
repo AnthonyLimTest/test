@@ -1,5 +1,4 @@
-from setuptools import find_packages, setup, Extension
-import numpy
+from setuptools import find_packages, setup
 
 
 version = "0.13.0b6"
