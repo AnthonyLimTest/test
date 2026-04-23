@@ -1,10 +1,13 @@
 name: Build and upload to PyPI
 
 on:
-  pull_request:
-    branches: ['main']
-  merge_group:
-    types: [checks_requested]
+  push:
+    branches:
+    - 'main'
+
+permissions:
+  contents: write
+
 
 permissions:
   contents: write
@@ -14,20 +17,14 @@ jobs:
     name: update version
     runs-on: ubuntu-slim
     steps:
-      - name: PR
-        if: github.event_name == 'pull_request'
-        run: echo 'skip for PR'
       - name: checkout
-        if: github.event_name == 'merge_group'
         uses: actions/checkout@v4
         with:
           fetch-depth: "1"
       - name: Update version on merge
-        if: github.event_name == 'merge_group'
         run: |
             python tools/version.py "beta"
       - name: Store changes
-        if: github.event_name == 'merge_group'
         uses: actions/upload-artifact@v4
         with:
           name: pyproject
@@ -41,25 +38,18 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: PR
-        if: github.event_name == 'pull_request'
-        run: echo 'skip for PR'
       - name: checkout
-        if: github.event_name == 'merge_group'
         uses: actions/checkout@v4
         with:
           fetch-depth: "1"
 
       - uses: actions/download-artifact@v4
-        if: github.event_name == 'merge_group'
         with:
           name: pyproject
       - name: check
-        if: github.event_name == 'merge_group'
         run: |
           cat pyproject.toml
       - uses: EndBug/add-and-commit@v9
-        if: github.event_name == 'merge_group'
         with:
           author_name: github-actions
           author_email: github-actions@github.com
