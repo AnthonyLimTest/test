@@ -13,24 +13,27 @@ jobs:
   update_version:
     name: update version
     runs-on: ubuntu-slim
-    if: github.event_name == 'merge_group'
     steps:
+      - name: PR
+        if: github.event_name == 'pull_request'
+        run: echo 'skip for PR'
       - name: checkout
+        if: github.event_name == 'merge_group'
         uses: actions/checkout@v4
         with:
           fetch-depth: "1"
       - name: Update version on merge
-        run:  |
+        if: github.event_name == 'merge_group'
+        run: |
             python tools/version.py "beta"
       - name: Store changes
+        if: github.event_name == 'merge_group'
         uses: actions/upload-artifact@v4
         with:
           name: pyproject
           path: |
             ./pyproject.toml
             ./setup.py
-    if: github.event_name == 'pull_request'
-        run: echo 'skip for PR'
 
   update_setup:
     needs: [update_version]
@@ -56,8 +59,7 @@ jobs:
           author_email: github-actions@github.com
           message: "update version number"
           add: |
-            - setup.py'
+            - setup.py
             - pyproject.toml
      if: github.event_name == 'pull_request'
         run: 'echo skip for PR'
-
