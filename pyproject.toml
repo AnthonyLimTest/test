@@ -1,0 +1,18 @@
+[build-system]
+requires = ['setuptools', 'numpy']
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = 'mergeTest'
+
+version = "0.13.0b6"
+
+requires-python = ">=3.8"
+authors = [{name='Anthony Lim', email='anthony.lim@stfc.ac.uk'}]
