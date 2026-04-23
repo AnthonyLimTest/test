@@ -1,9 +1,10 @@
 name: Build and upload to PyPI
 
 on:
-  push:
+  pull_request:
     branches:
-    - 'main'
+      - 'main'
+
 
 permissions:
   contents: write
@@ -45,12 +46,11 @@ jobs:
       - name: check
         run: |
           cat pyproject.toml
-      - uses: EndBug/add-and-commit@v9
-        with:
-          author_name: github-actions
-          author_email: github-actions@github.com
-          message: "update version number"
-          add: |
-            - setup.py
-            - pyproject.toml
 
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "develop"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_label: "feature, automated pr"
+          pr_title: "[Example] Simple demo"
