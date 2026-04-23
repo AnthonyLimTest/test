@@ -10,10 +10,10 @@ permissions:
   contents: write
 
 jobs:
-  if: github.event_name == 'merge_group'
   update_version:
     name: update version
     runs-on: ubuntu-slim
+    if: github.event_name == 'merge_group'
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -29,9 +29,13 @@ jobs:
           path: |
             ./pyproject.toml
             ./setup.py
+    if: github.event_name == 'pull_request'
+      steps:
+        run: echo skip for PR
 
   update_setup:
     needs: [update_version]
+    if: github.event_name == 'merge_group'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -54,4 +58,8 @@ jobs:
           message: "update version number"
           add: |
             - pyproject.toml
-            - setup.py'
+     if: github.event_name == 'pull_request'
+      steps:
+        run: echo skip for PR
+
+           - setup.py'
