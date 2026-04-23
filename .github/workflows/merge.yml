@@ -30,7 +30,6 @@ jobs:
             ./pyproject.toml
             ./setup.py
     if: github.event_name == 'pull_request'
-      steps:
         run: echo skip for PR
 
   update_setup:
@@ -57,9 +56,8 @@ jobs:
           author_email: github-actions@github.com
           message: "update version number"
           add: |
+            - setup.py'
             - pyproject.toml
      if: github.event_name == 'pull_request'
-      steps:
         run: echo skip for PR
 
-           - setup.py'
